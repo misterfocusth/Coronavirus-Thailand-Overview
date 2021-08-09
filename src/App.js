@@ -22,6 +22,21 @@ import Past14DaysPrisonCases from "./Components/Cards/Charts/Past14DaysPrisonCas
 import Past14DaysVaccineChart from "./Components/Cards/Charts/Past14DaysVaccineChart";
 import TotalVaccineBar from "./Components/Cards/Charts/TotalVaccineBar";
 
+// Firebase
+import firebase from "firebase/app";
+import "firebase/analytics";
+
+var firebaseConfig = {
+
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+firebase.analytics();
+
 const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
@@ -66,25 +81,26 @@ export default function App() {
   async function fetchData() {
     axios.get(DAILY_SUMMARY_ENDPOINT + API_KEY)
       .then((response) => setDailySummary(response.data))
+      .catch((error) => console.error(error))
 
-      axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY)
+    axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY)
       .then((response) => setDailyProvincesSummary(response.data))
-      axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14")
+      .catch((error) => console.error(error))
+
+    axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14")
       .then((response) => {
         setPast14DatSummary(response.data)
+      })
+      .then(() => {
         setOpenBackdrop(false);
         setIsDataReady(true);
       })
-
-
-      console.log(dailySummary);
-      console.log(dailyProvincesSummary);
-      console.log(past14DaySummary);
+      .catch((error) => console.error(error))
   }
 
   useEffect(() => {
     fetchData();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const MyAppBar = () => {
@@ -133,7 +149,7 @@ export default function App() {
 
       {(isDataReady) ?
         <div>
-          <div 
+          <div
             className={classes.center}
             style={{
               marginTop: "15px"
@@ -143,7 +159,7 @@ export default function App() {
             <NewConfirmedChart past14DaySummary={past14DaySummary} />
           </div>
 
-          <div 
+          <div
             className={classes.center}
             style={{
               marginTop: "15px"
@@ -153,7 +169,7 @@ export default function App() {
             <NewCasesAndNewRecoveredChart past14DaySummary={past14DaySummary} />
           </div>
 
-          <div 
+          <div
             className={classes.center}
             style={{
               marginTop: "15px"
@@ -165,7 +181,7 @@ export default function App() {
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
-          <div 
+          <div
             className={classes.center}
             style={{
               marginTop: "15px"
@@ -174,7 +190,7 @@ export default function App() {
             <TotalVaccineBar dailySummary={dailySummary} />
           </div>
 
-          <div 
+          <div
             className={classes.center}
             style={{
               marginTop: "15px"
@@ -186,8 +202,15 @@ export default function App() {
         </div>
         : <div></div>}
 
-        <h4 className={classes.center}>Developer with 💗 by : Sila Pakdeewong (@misterfocusth)</h4>
-        <h4 className={classes.center}>Special Thanks Data Source and API by : MindSafety (lab-covid.mindbase.co.th/) / กระทรวงสาธารณสุข (SAT - MOPH)</h4>
+      <h4 className={classes.center}>Developer with 💗 by : Sila Pakdeewong (@misterfocusth)</h4>
+      <h4 className={classes.center}>
+        Source On GitHub : (<a href="https://github.com/misterfocusth/Coronavirus-Thailand-Overview">
+          <span>github.com/misterfocusth/Coronavirus-Thailand-Overview</span>
+        </a>)
+      </h4>
+      <h4 className={classes.center}>Special Thanks Data Source and API by : MindSafety (<a href="https://lab-covid.mindbase.co.th/#/">
+          <span>lab-covid.mindbase.co.th/</span>
+        </a>) / กระทรวงสาธารณสุข (SAT - MOPH)</h4>
     </div>
   );
 }
