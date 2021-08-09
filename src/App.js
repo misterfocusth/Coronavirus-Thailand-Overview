@@ -4,12 +4,10 @@ import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
 import Typography from "@material-ui/core/Typography";
-import Button from "@material-ui/core/Button";
 import IconButton from "@material-ui/core/IconButton";
 import CachedIcon from "@material-ui/icons/Cached";
 import Backdrop from "@material-ui/core/Backdrop";
 import CircularProgress from "@material-ui/core/CircularProgress";
-import Chart from "react-apexcharts";
 import Divider from '@material-ui/core/Divider';
 
 // Components
@@ -18,9 +16,13 @@ import NewConfirmedChart from "./Components/Cards/Charts/Past14DaysConfirmedChar
 import NewCasesAndNewRecoveredChart from "./Components/Cards/Charts/Past14DaysCasesAndNewRecoveredChart";
 import NewDeathsChart from "./Components/Cards/Charts/Past14DaysDeathsChart";
 import Past14DaysSumChart from "./Components/Cards/Charts/Past14DaysSumChart";
+import TodayMostCasesProvincesChart from "./Components/Cards/Charts/TodayMostCasesProvincesChart";
+import TotalVaccineChart from "./Components/Cards/Charts/TotalVaccineChart";
+import Past14DaysPrisonCases from "./Components/Cards/Charts/Past14DaysPrisonCasesChart";
+import Past14DaysVaccineChart from "./Components/Cards/Charts/Past14DaysVaccineChart";
+import TotalVaccineBar from "./Components/Cards/Charts/TotalVaccineBar";
 
-// Utils
-import dateHelper from "./Utils/DateHelper";
+const axios = require("axios");
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -51,8 +53,9 @@ export default function App() {
   const [dailyProvincesSummary, setDailyProvincesSummary] = useState([{}]);
   const [past14DaySummary, setPast14DatSummary] = useState([{}]);
   const [openBackdrop, setOpenBackdrop] = useState(true);
+  const [isDataReady, setIsDataReady] = useState(false)
 
-  const API_KEY = "12c8f541-c0f7-4eed-9888-202107164a9ef46387";
+  const API_KEY = "";
   const DAILY_SUMMARY_ENDPOINT =
     "https://api-lab-covid.mindbase.co.th/v2/stats/daily?key=";
   const DAILY_PROVINCES_SUMMARY_ENDPOINT =
@@ -61,20 +64,18 @@ export default function App() {
     "https://api-lab-covid.mindbase.co.th/v2/stats/dailies?key=";
 
   async function fetchData() {
-    fetch(DAILY_SUMMARY_ENDPOINT + API_KEY)
-      .then((response) => response.json())
-      .then((data) => setDailySummary(data));
+    axios.get(DAILY_SUMMARY_ENDPOINT + API_KEY)
+      .then((response) => setDailySummary(response.data))
 
-    fetch(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY)
-      .then((response) => response.json())
-      .then((data) => setDailyProvincesSummary(data));
-
-    fetch(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14")
-      .then((response) => response.json())
-      .then((data) => {
-        setPast14DatSummary(data);
+      axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY)
+      .then((response) => setDailyProvincesSummary(response.data))
+      axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14")
+      .then((response) => {
+        setPast14DatSummary(response.data)
         setOpenBackdrop(false);
-      });
+        setIsDataReady(true);
+      })
+
 
       console.log(dailySummary);
       console.log(dailyProvincesSummary);
@@ -83,9 +84,7 @@ export default function App() {
 
   useEffect(() => {
     fetchData();
-    console.log(dailySummary);
-    console.log(dailyProvincesSummary);
-    console.log(past14DaySummary);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const MyAppBar = () => {
@@ -114,13 +113,6 @@ export default function App() {
     );
   };
 
-  const getUpdatedDate = () => {
-    if (dailySummary) {
-      let date = (dailySummary.data.updated_date || "");
-      return date.replaceAll(".", "/")
-    }
-  }
-
   return (
     <div className="App">
       <MyAppBar />
@@ -128,18 +120,18 @@ export default function App() {
         <CircularProgress color="inherit" />
       </Backdrop>
 
-      {!openBackdrop ?
+      {isDataReady ?
         <div>
           <div className={classes.center} style={{ marginTop: "10px" }}>
             <HeaderCard data={dailySummary} />
           </div>
-          <h4 className={classes.center}>ข้อมูล ณ วันที่ : {getUpdatedDate()} (ข้อมูลยอดสะสมตั้งเเต่การเเพร่ระบาดระลอกเมษายน 2563)</h4>
+          <h4 className={classes.center}>ข้อมูล ณ วันที่ : {(dailySummary.data.updated_date).replaceAll(".", "/")} (ข้อมูลยอดสะสมตั้งเเต่การเเพร่ระบาดระลอกเมษายน 2563)</h4>
           <Divider variant="middle" style={{ marginTop: "15px" }} />
         </div>
 
         : <div></div>}
 
-      {!openBackdrop ?
+      {(isDataReady) ?
         <div>
           <div 
             className={classes.center}
@@ -147,7 +139,17 @@ export default function App() {
               marginTop: "15px"
             }}
           >
+            <TodayMostCasesProvincesChart dailyProvincesSummary={dailyProvincesSummary} />
             <NewConfirmedChart past14DaySummary={past14DaySummary} />
+          </div>
+
+          <div 
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <Past14DaysPrisonCases past14DaySummary={past14DaySummary} />
             <NewCasesAndNewRecoveredChart past14DaySummary={past14DaySummary} />
           </div>
 
@@ -160,10 +162,32 @@ export default function App() {
             <NewDeathsChart past14DaySummary={past14DaySummary} />
             <Past14DaysSumChart past14DaySummary={past14DaySummary} />
           </div>
-        </div>
 
+          <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+          <div 
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <TotalVaccineBar dailySummary={dailySummary} />
+          </div>
+
+          <div 
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
+            <TotalVaccineChart past14DaySummary={past14DaySummary} />
+          </div>
+        </div>
         : <div></div>}
 
+        <h4 className={classes.center}>Developer with 💗 by : Sila Pakdeewong (@misterfocusth)</h4>
+        <h4 className={classes.center}>Special Thanks Data Source and API by : MindSafety (lab-covid.mindbase.co.th/) / กระทรวงสาธารณสุข (SAT - MOPH)</h4>
     </div>
   );
 }

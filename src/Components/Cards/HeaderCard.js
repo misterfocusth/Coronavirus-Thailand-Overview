@@ -1,11 +1,6 @@
 import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import FormLabel from '@material-ui/core/FormLabel';
-import FormControlLabel from '@material-ui/core/FormControlLabel';
-import RadioGroup from '@material-ui/core/RadioGroup';
-import Radio from '@material-ui/core/Radio';
-import Paper from '@material-ui/core/Paper';
 import NewConfirmedCases from './DailySum/NewConfirmed';
 import NewRecoveredCard from './DailySum/NewRecovered';
 import NewHospitalized from './DailySum/NewHospitalized';
@@ -30,7 +25,8 @@ export default function HeaderCard(props) {
     const [data, setData] = React.useState({});
 
     const numberWithCommas = (x) => {
-        return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        // return x.toString().replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+        return x.toLocaleString(undefined, {maximumFractionDigits:0})
     }
 
     useEffect(() => {
@@ -59,6 +55,7 @@ export default function HeaderCard(props) {
             secondVaccineTotal: numberWithCommas(propsData.data.cumulative_vaccine2),
 
         });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

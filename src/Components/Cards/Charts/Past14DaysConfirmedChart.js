@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 
 export default function NewConfirmedChart(props) {
@@ -33,7 +33,7 @@ export default function NewConfirmedChart(props) {
                 <Chart
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
-                    type="line"
+                    type="area"
                     width="750"
                 />
             </div>

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Chart from "react-apexcharts";
 
 export default function Past14DaysSumChart(props) {
