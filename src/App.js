@@ -27,7 +27,7 @@ import firebase from "firebase/app";
 import "firebase/analytics";
 
 var firebaseConfig = {
-
+  
 };
 
 if (!firebase.apps.length) {
@@ -79,23 +79,19 @@ export default function App() {
     "https://api-lab-covid.mindbase.co.th/v2/stats/dailies?key=";
 
   async function fetchData() {
-    axios.get(DAILY_SUMMARY_ENDPOINT + API_KEY)
-      .then((response) => setDailySummary(response.data))
-      .catch((error) => console.error(error))
+    const response_1 = await axios.get(DAILY_SUMMARY_ENDPOINT + API_KEY);
+    const response_2 = await axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY);
+    const response_3 = await axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14");
 
-    axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY)
-      .then((response) => setDailyProvincesSummary(response.data))
-      .catch((error) => console.error(error))
-
-    axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14")
-      .then((response) => {
-        setPast14DatSummary(response.data)
-      })
-      .then(() => {
-        setOpenBackdrop(false);
-        setIsDataReady(true);
-      })
-      .catch((error) => console.error(error))
+    if (response_1.data && response_2.data && response_3.data) {
+      setDailySummary(response_1.data)
+      setDailyProvincesSummary(response_2.data)
+      setPast14DatSummary(response_3.data)
+      setOpenBackdrop(false);
+      setIsDataReady(true);
+    } else {
+      window.location.href = "/"
+    }
   }
 
   useEffect(() => {
@@ -199,18 +195,27 @@ export default function App() {
             <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
             <TotalVaccineChart past14DaySummary={past14DaySummary} />
           </div>
+
+          <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+          <div className={classes.center} style={{ marginTop: "15px" }}>
+            <iframe title="ระบบค้นหาแล็บตรวจโควิด" src="https://covid-lab.co/" height={800} width={"95%"} ></iframe>
+          </div>
         </div>
         : <div></div>}
 
-      <h4 className={classes.center}>Developer with 💗 by : Sila Pakdeewong (@misterfocusth)</h4>
+      <h4 className={classes.center}>Develop with 💗 by : Sila Pakdeewong (@misterfocusth)</h4>
       <h4 className={classes.center}>
         Source On GitHub : (<a href="https://github.com/misterfocusth/Coronavirus-Thailand-Overview">
           <span>github.com/misterfocusth/Coronavirus-Thailand-Overview</span>
         </a>)
       </h4>
-      <h4 className={classes.center}>Special Thanks Data Source and API by : MindSafety (<a href="https://lab-covid.mindbase.co.th/#/">
-          <span>lab-covid.mindbase.co.th/</span>
-        </a>) / กระทรวงสาธารณสุข (SAT - MOPH)</h4>
+      <h4 className={classes.center}>Special Thanks Data Source and API by : Mindbase (<a href="https://lab-covid.mindbase.co.th/#/">
+        <span>lab-covid.mindbase.co.th/</span>
+      </a>) / กระทรวงสาธารณสุข (SAT - MOPH)</h4>
+      <h4 className={classes.center}>ข้อมูลระบบค้นหาเเล็ปตรวจเชื้อโควิด : (<a href="https://covid-lab.co/">
+        <span>https://covid-lab.co/</span>
+      </a>)</h4>
     </div>
   );
 }
