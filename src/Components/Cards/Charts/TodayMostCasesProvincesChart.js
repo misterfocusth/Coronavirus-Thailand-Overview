@@ -5,6 +5,7 @@ export default function TodayMostCasesProvincesChart(props) {
 
     var newConfirmedChart = {
         series: [{
+            name: "จำนวนผู้ติดเชื้อรายใหม่วันนี้ : ",
             data: [props.dailyProvincesSummary.data.provinces[13].count, props.dailyProvincesSummary.data.provinces[12].count, props.dailyProvincesSummary.data.provinces[11].count, props.dailyProvincesSummary.data.provinces[10].count, props.dailyProvincesSummary.data.provinces[9].count, props.dailyProvincesSummary.data.provinces[8].count, props.dailyProvincesSummary.data.provinces[7].count, props.dailyProvincesSummary.data.provinces[6].count, props.dailyProvincesSummary.data.provinces[5].count, props.dailyProvincesSummary.data.provinces[4].count, props.dailyProvincesSummary.data.provinces[3].count, props.dailyProvincesSummary.data.provinces[2].count, props.dailyProvincesSummary.data.provinces[1].count, props.dailyProvincesSummary.data.provinces[0].count]
           }],
         options: {

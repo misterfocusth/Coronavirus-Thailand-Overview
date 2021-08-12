@@ -1,12 +1,12 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-export default function NewDeathsChart(props) {
+export default function Past14DaysInHospital(props) {
 
     var newConfirmedChart = {
         series: [{
-            name: "จำนวนผู้เสียชีวิต : ",
-            data: [props.past14DaySummary.data.details[13].daily_deaths, props.past14DaySummary.data.details[12].daily_deaths, props.past14DaySummary.data.details[11].daily_deaths, props.past14DaySummary.data.details[10].daily_deaths, props.past14DaySummary.data.details[9].daily_deaths, props.past14DaySummary.data.details[8].daily_deaths, props.past14DaySummary.data.details[7].daily_deaths, props.past14DaySummary.data.details[6].daily_deaths, props.past14DaySummary.data.details[5].daily_deaths, props.past14DaySummary.data.details[4].daily_deaths, props.past14DaySummary.data.details[3].daily_deaths, props.past14DaySummary.data.details[2].daily_deaths, props.past14DaySummary.data.details[1].daily_deaths, props.past14DaySummary.data.details[0].daily_deaths]
+            name: "ผู้ป่วยรักษาตัวในโรงพยาบาล : ",
+            data: [props.past14DaySummary.data.details[13].daily_stay_patient, props.past14DaySummary.data.details[12].daily_stay_patient, props.past14DaySummary.data.details[11].daily_stay_patient, props.past14DaySummary.data.details[10].daily_stay_patient, props.past14DaySummary.data.details[9].daily_stay_patient, props.past14DaySummary.data.details[8].daily_stay_patient, props.past14DaySummary.data.details[7].daily_stay_patient, props.past14DaySummary.data.details[6].daily_stay_patient, props.past14DaySummary.data.details[5].daily_stay_patient, props.past14DaySummary.data.details[4].daily_stay_patient, props.past14DaySummary.data.details[3].daily_stay_patient, props.past14DaySummary.data.details[2].daily_stay_patient, props.past14DaySummary.data.details[1].daily_stay_patient, props.past14DaySummary.data.details[0].daily_stay_patient]
           }],
         options: {
           chart: {
@@ -16,9 +16,9 @@ export default function NewDeathsChart(props) {
               enable: false
             }
           },
-            colors: ["#212121"],
+            colors: ["#F1C40F"],
           title: {
-            text: 'จำนวนผู้เสียชีวิตย้อนหลัง 14 วัน',
+            text: 'จำนวนผู้ป่วยรักษาตัวในโรงพยาบาลย้อนหลัง 14 วัน',
             align: 'center',
           },
           xaxis: {

@@ -1,12 +1,12 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-export default function NewDeathsChart(props) {
+export default function Past14DaysRecovered(props) {
 
     var newConfirmedChart = {
         series: [{
-            name: "จำนวนผู้เสียชีวิต : ",
-            data: [props.past14DaySummary.data.details[13].daily_deaths, props.past14DaySummary.data.details[12].daily_deaths, props.past14DaySummary.data.details[11].daily_deaths, props.past14DaySummary.data.details[10].daily_deaths, props.past14DaySummary.data.details[9].daily_deaths, props.past14DaySummary.data.details[8].daily_deaths, props.past14DaySummary.data.details[7].daily_deaths, props.past14DaySummary.data.details[6].daily_deaths, props.past14DaySummary.data.details[5].daily_deaths, props.past14DaySummary.data.details[4].daily_deaths, props.past14DaySummary.data.details[3].daily_deaths, props.past14DaySummary.data.details[2].daily_deaths, props.past14DaySummary.data.details[1].daily_deaths, props.past14DaySummary.data.details[0].daily_deaths]
+            name: "ผู้หายป่วยรายใหม่ : ",
+            data: [props.past14DaySummary.data.details[13].daily_recovered, props.past14DaySummary.data.details[12].daily_recovered, props.past14DaySummary.data.details[11].daily_recovered, props.past14DaySummary.data.details[10].daily_recovered, props.past14DaySummary.data.details[9].daily_recovered, props.past14DaySummary.data.details[8].daily_recovered, props.past14DaySummary.data.details[7].daily_recovered, props.past14DaySummary.data.details[6].daily_recovered, props.past14DaySummary.data.details[5].daily_recovered, props.past14DaySummary.data.details[4].daily_recovered, props.past14DaySummary.data.details[3].daily_recovered, props.past14DaySummary.data.details[2].daily_recovered, props.past14DaySummary.data.details[1].daily_recovered, props.past14DaySummary.data.details[0].daily_recovered]
           }],
         options: {
           chart: {
@@ -16,9 +16,9 @@ export default function NewDeathsChart(props) {
               enable: false
             }
           },
-            colors: ["#212121"],
+            colors: ["#2ECC71"],
           title: {
-            text: 'จำนวนผู้เสียชีวิตย้อนหลัง 14 วัน',
+            text: 'จำนวนผู้หายป่วยย้อนหลัง 14 วัน',
             align: 'center',
           },
           xaxis: {
