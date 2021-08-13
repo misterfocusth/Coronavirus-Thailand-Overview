@@ -28,6 +28,7 @@ import "firebase/analytics";
 import Past14DaysInHospital from "./Components/Cards/Charts/Past14DaysInHospitalChart";
 import Past14DaysRecovered from "./Components/Cards/Charts/Past14DaysRecoveredChart";
 import Past14DaysTestingChart from "./Components/Cards/Charts/Past14DaysTestingChart";
+import Past14DaysPositiveRateChart from "./Components/Cards/Charts/Past14DaysPositiveRateChart";
 
 var firebaseConfig = {
   apiKey: "AIzaSyBOuEygVsnpuFtPG0huRKZKUBXcaE13mHI",
@@ -133,8 +134,6 @@ export default function App() {
       setTestingData(testing_data_response.data);
       setOpenBackdrop(false);
       setIsDataReady(true);
-
-      console.log(testingData[testingData.length - 1])
     } else {
       window.location.href = "/"
     }
@@ -219,7 +218,7 @@ export default function App() {
             }}
           >
             <NewDeathsChart past14DaySummary={past14DaySummary} />
-            <Past14DaysTestingChart testingData={testingData} />
+            {/* <Past14DaysTestingChart testingData={testingData} /> */}
           </div>
 
           <h5 className={classes.center} >
@@ -227,12 +226,36 @@ export default function App() {
               <span>lab-covid.mindbase.co.th/</span></a>) / กระทรวงสาธารณสุข (SAT - MOPH)
           </h5>
 
+          <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>เเนวโน้มการตรวจเชื้อโควิด-19 เเละอัตรา Positive Rate (การตรวจพบเชื้อ) ในประเทศไทย ด้วยวิธี RT-PCR</h2>
+
+          <div
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <Past14DaysTestingChart testingData={testingData} />
+            <Past14DaysPositiveRateChart testingData={testingData} />
+          </div>
+
+          <h5 className={classes.center} >(มหาวิทยาลัย John Hopkins แนะนำว่าการตรวจเชื้อที่เพียงพอควรมีค่าร้อยละการเจอผลเป็นบวกต่อตัวอย่าง (Positive Rate) ไม่เกิน 5 %)</h5>
           <h5 className={classes.center} >ข้อมูลการตรวจเชื้อโควิด-19 รายวันด้วยวิธี RT-PCR จากกรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข (ตัวเลขการตรวจรายวันหมายถึงจำนวนตัวอย่างที่ได้รับการตรวจ RT-PCR จากห้องปฏิบัติการของรัฐบาลและเอกชน ข้อมูลอัพเดทรายสัปดาห์)</h5>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
-          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>เเนวโน้มสถานการณ์การเเพร่ระบาดย้อนหลัง 14 วัน</h2>
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>เเนวโน้มสถานการณ์การติดเชื้อโควิด-19 ในประเทศไทย ย้อนหลัง 12 วันล่าสุด</h2>
 
+          <div
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <Past14DaysSumChart past14DaySummary={past14DaySummary} />
+            <NewCasesAndNewRecoveredChart past14DaySummary={past14DaySummary} />
+          </div>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
