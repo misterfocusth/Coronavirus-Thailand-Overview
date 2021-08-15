@@ -1,0 +1,97 @@
+import React, { useEffect } from "react";
+
+import { makeStyles } from '@material-ui/core/styles';
+import Card from '@material-ui/core/Card';
+import CardContent from '@material-ui/core/CardContent';
+import Typography from '@material-ui/core/Typography';
+
+import Divider from '@material-ui/core/Divider';
+
+const useStyles = makeStyles({
+    root: {
+        width: "700px",
+        height: "410px",
+        marginLeft: "30px"
+    },
+});
+
+export default function TestingSumCard(props) {
+    const classes = useStyles();
+
+    const [sum14Days, setSum14Days] = React.useState([{
+        tests: 0,
+        positive: 0,
+    }]);
+
+    const numberWithCommas = (x) => {
+        return x.toLocaleString(undefined, {maximumFractionDigits:0})
+    }
+
+    useEffect(() => {
+        // var total = [0, 0, 0];
+        // for (let i = 0; i < 2; i++) {
+        //     for (let x = 0; x < props.past14DaySummary.data.details.length; x++) {
+        //         if (i === 0) {
+        //             total[0] += props.past14DaySummary.data.details[x].daily_covid_cases
+        //         } else if (i === 1) {
+        //             total[1] += props.past14DaySummary.data.details[x].daily_recovered
+        //         } else if (i === 2) {
+        //             total[2] += props.past14DaySummary.data.details[x].daily_deaths
+        //         }
+        //     }
+        // }
+        // setSum14Days({
+        //     cases: numberWithCommas(total[0]),
+        //     recovered: numberWithCommas(total[1]),
+        //     death: numberWithCommas(total[2])
+        // })
+    })
+
+    return (
+        <div>
+            <Card className={classes.root} >
+                <CardContent>
+                    <Typography variant="h6" style={{ fontWeight: 600, textAlign: "center" }}>
+                        การตรวจเชื้อโควิด-19 ด้วยวิธี RT-PCR
+                    </Typography>
+
+                    <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+                    <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        ยอดสะสมผู้ติดเชื้อ : <span style={{ color: "#EA5771" }} >{numberWithCommas(props.dailySummary.data.cumulative_covid_cases63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#EA5771" }} >{numberWithCommas(props.dailySummary.data.daily_covid_cases)}</span> ราย)
+                    </Typography>
+
+                    <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        จำนวนผู้ติดเชื้อรายใหม่ในรอบ 14 วัน : <span style={{ color: "#EA5771" }} >{sum14Days.cases}</span> ราย
+                    </Typography>
+
+                    <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+                    <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        ยอดสะสมผู้หายป่วย : <span style={{ color: "#039245" }} >{numberWithCommas(props.dailySummary.data.cumulative_recovered_cases63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#039245" }} >{numberWithCommas(props.dailySummary.data.daily_recovered)}</span> ราย)
+                    </Typography>
+
+                    <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        จำนวนผู้หายป่วยรายใหม่ในรอบ 14 วัน : <span style={{ color: "#039245" }} >{sum14Days.recovered}</span> ราย
+                    </Typography>
+
+                    <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+                    <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        ยอดสะสมผู้เสียชีวิต : <span style={{ color: "#212121" }} >{numberWithCommas(props.dailySummary.data.cumulative_deaths63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#212121" }} >{numberWithCommas(props.dailySummary.data.daily_deaths)}</span> ราย)
+                    </Typography>
+
+                    <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        จำนวนผู้เสียชีวิตรายใหม่ในรอบ 14 วัน : <span style={{ color: "#212121" }} >{sum14Days.death}</span> ราย
+                    </Typography>
+
+                    <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+                    <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
+                        ยอดสะสมรักษาตัวในโรงพยาบาล : <span style={{ color: "#fbc02d" }} >{numberWithCommas(props.dailySummary.data.cumulative_recovered_cases63)}</span> ราย
+                    </Typography>
+                </CardContent>
+            </Card>
+        </div>
+    )
+}

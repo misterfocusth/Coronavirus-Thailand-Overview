@@ -17,7 +17,7 @@ export default function NewCasesAndNewRecoveredChart(props) {
         options: {
             chart: {
                 height: "500",
-                type: "line",
+                type: "bar",
                 zoom: {
                     enable: false
                 }
@@ -42,7 +42,7 @@ export default function NewCasesAndNewRecoveredChart(props) {
                 <Chart
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
-                    type="area"
+                    type="bar"
                     width="750"
                 />
             </div>

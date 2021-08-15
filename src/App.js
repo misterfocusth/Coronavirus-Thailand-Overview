@@ -17,10 +17,9 @@ import NewCasesAndNewRecoveredChart from "./Components/Cards/Charts/Past14DaysCa
 import NewDeathsChart from "./Components/Cards/Charts/Past14DaysDeathsChart";
 import Past14DaysSumChart from "./Components/Cards/Charts/Past14DaysSumChart";
 import TodayMostCasesProvincesChart from "./Components/Cards/Charts/TodayMostCasesProvincesChart";
-import TotalVaccineChart from "./Components/Cards/Charts/TotalVaccineChart";
-import Past14DaysPrisonCases from "./Components/Cards/Charts/Past14DaysPrisonCasesChart";
-import Past14DaysVaccineChart from "./Components/Cards/Charts/Past14DaysVaccineChart";
-import TotalVaccineBar from "./Components/Cards/Charts/TotalVaccineBar";
+import TotalVaccineChart from "./Components/Cards/Charts/Vaccination/TotalVaccineChart";
+import Past14DaysVaccineChart from "./Components/Cards/Charts/Vaccination/Past14DaysVaccineChart";
+import TotalVaccineBar from "./Components/Cards/Charts/Vaccination/TotalVaccineBar";
 
 // Firebase
 import firebase from "firebase/app";
@@ -29,23 +28,26 @@ import Past14DaysInHospital from "./Components/Cards/Charts/Past14DaysInHospital
 import Past14DaysRecovered from "./Components/Cards/Charts/Past14DaysRecoveredChart";
 import Past14DaysTestingChart from "./Components/Cards/Charts/Past14DaysTestingChart";
 import Past14DaysPositiveRateChart from "./Components/Cards/Charts/Past14DaysPositiveRateChart";
+import TotalSumCard from "./Components/Cards/TotalSumCard";
+import TotalSumChart from "./Components/Cards/TotalSumChart";
+import TestingSumCard from "./Components/Cards/Charts/Testing/TestingSumCard";
 
-var firebaseConfig = {
-  apiKey: "AIzaSyBOuEygVsnpuFtPG0huRKZKUBXcaE13mHI",
-  authDomain: "covid-19-thailand-overview.firebaseapp.com",
-  projectId: "covid-19-thailand-overview",
-  storageBucket: "covid-19-thailand-overview.appspot.com",
-  messagingSenderId: "47314685559",
-  appId: "1:47314685559:web:b61f8f7dbc6241f0d0c072",
-  measurementId: "G-ZP8N3GHBR7"
-};
+// var firebaseConfig = {
+//   apiKey: "AIzaSyBOuEygVsnpuFtPG0huRKZKUBXcaE13mHI",
+//   authDomain: "covid-19-thailand-overview.firebaseapp.com",
+//   projectId: "covid-19-thailand-overview",
+//   storageBucket: "covid-19-thailand-overview.appspot.com",
+//   messagingSenderId: "47314685559",
+//   appId: "1:47314685559:web:b61f8f7dbc6241f0d0c072",
+//   measurementId: "G-ZP8N3GHBR7"
+// };
 
-if (!firebase.apps.length) {
-  firebase.initializeApp(firebaseConfig);
-} else {
-  firebase.app();
-}
-firebase.analytics();
+// if (!firebase.apps.length) {
+//   firebase.initializeApp(firebaseConfig);
+// } else {
+//   firebase.app();
+// }
+// firebase.analytics();
 
 const axios = require("axios");
 
@@ -209,6 +211,7 @@ export default function App() {
           >
             <Past14DaysInHospital past14DaySummary={past14DaySummary} />
             <Past14DaysRecovered past14DaySummary={past14DaySummary} />
+            <NewDeathsChart past14DaySummary={past14DaySummary} />
           </div>
 
           <div
@@ -217,8 +220,8 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <NewDeathsChart past14DaySummary={past14DaySummary} />
-            {/* <Past14DaysTestingChart testingData={testingData} /> */}
+            <TotalSumChart past14DaySummary={past14DaySummary} />
+            <TotalSumCard past14DaySummary={past14DaySummary} dailySummary={dailySummary} />
           </div>
 
           <h5 className={classes.center} >
@@ -237,6 +240,7 @@ export default function App() {
             }}
           >
             <Past14DaysTestingChart testingData={testingData} />
+            <TestingSumCard testingData={testingData} />
             <Past14DaysPositiveRateChart testingData={testingData} />
           </div>
 
@@ -259,7 +263,7 @@ export default function App() {
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
-          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>การฉีดวัคซีนโควิด-19 ในประเทศไทย</h2>
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>ความคืบหน้าการฉีดวัคซีนโควิด-19 ในประเทศไทย</h2>
 
           <div
             className={classes.center}
@@ -276,8 +280,8 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
             <TotalVaccineChart past14DaySummary={past14DaySummary} />
+            <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
           </div>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />

@@ -16,6 +16,7 @@ export default function TodayMostCasesProvincesChart(props) {
               enable: false
             }
           },
+          colors: ["#EA5771"],
           plotOptions: {
             bar: {
                 borderRadius: 5,

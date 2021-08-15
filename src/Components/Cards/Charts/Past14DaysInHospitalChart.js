@@ -19,10 +19,26 @@ export default function Past14DaysInHospital(props) {
             colors: ["#F1C40F"],
           title: {
             text: 'จำนวนผู้ป่วยรักษาตัวในโรงพยาบาลย้อนหลัง 14 วัน',
-            align: 'center',
+            align: 'left',
+            offsetX: 25
           },
           xaxis: {
-            categories: [props.past14DaySummary.data.details[13].updated_date, props.past14DaySummary.data.details[12].updated_date, props.past14DaySummary.data.details[11].updated_date, props.past14DaySummary.data.details[10].updated_date, props.past14DaySummary.data.details[9].updated_date, props.past14DaySummary.data.details[8].updated_date, props.past14DaySummary.data.details[7].updated_date, props.past14DaySummary.data.details[6].updated_date, props.past14DaySummary.data.details[5].updated_date, props.past14DaySummary.data.details[4].updated_date, props.past14DaySummary.data.details[3].updated_date, props.past14DaySummary.data.details[2].updated_date, props.past14DaySummary.data.details[1].updated_date, props.past14DaySummary.data.details[0].updated_date]
+            categories: [
+              (props.past14DaySummary.data.details[13].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[12].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[11].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[10].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[9].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[8].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[7].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[6].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[5].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[4].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[3].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[2].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[1].updated_date).substr(0, 10).replaceAll(".", "/"), 
+              (props.past14DaySummary.data.details[0].updated_date).substr(0, 10).replaceAll(".", "/")
+            ]
           }
         },
       }
@@ -34,7 +50,8 @@ export default function Past14DaysInHospital(props) {
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
                     type="area"
-                    width="750"
+                    width="500"
+                    height="500"
                 />
             </div>
         </div>

@@ -8,12 +8,14 @@ export default function TotalVaccineBar(props) {
     const [percent, setPercent] = React.useState({
         vaccine_1_percent: 0,
         vaccine_2_percent: 0,
+        vaccine_3_percent: 0,
     });
 
     useEffect(() => {
         setPercent({
             vaccine_1_percent: ((props.dailySummary.data.cumulative_vaccine1 / total_th_population) * 100).toFixed(2),
             vaccine_2_percent: ((props.dailySummary.data.cumulative_vaccine2 / total_th_population) * 100).toFixed(2),
+            vaccine_3_percent: ((props.dailySummary.data.cumulative_vaccine3 / total_th_population) * 100).toFixed(2),
         })
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -27,6 +29,10 @@ export default function TotalVaccineBar(props) {
             {
                 name: "ยอดฉีดวัคซีนสะสมเข็มที่ 2",
                 data: [percent.vaccine_2_percent]
+            },
+            {
+                name: "ยอดฉีดวัคซีนสะสมเข็มที่ 3",
+                data: [percent.vaccine_3_percent]
             }
         ],
         options: {
@@ -47,11 +53,14 @@ export default function TotalVaccineBar(props) {
                 enabled: true
             },
             title: {
-                text: 'ร้อยละยอดฉีดวัคซีนสะสมเข็มที่ 1 เเละเข็มที่ 2 (โดยประมาณ ต่อประชากรเป้าหมาย 70 ล้านคน)',
+                text: 'ร้อยละยอดฉีดวัคซีนสะสมเข็มที่ 1 เข็มที่ 2 เเละเข็มที่ 3 (โดยประมาณ ต่อประชากรเป้าหมาย 70 ล้านคน)',
                 align: 'center'
             },
             xaxis: {
-                categories: ["เข็มที่ 1", "เข็มที่ 2"]
+                categories: ["เข็มที่ 1", "เข็มที่ 2", "เข็มที่ 3"]
+            },
+            yaxis: {
+                max: 100
             }
         },
     }
@@ -63,8 +72,8 @@ export default function TotalVaccineBar(props) {
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
                     type="bar"
+                    width="750"
                     height="300"
-                    width="1500"
                 />
             </div>
         </div>
