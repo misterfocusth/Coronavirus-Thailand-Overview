@@ -53,6 +53,7 @@ export default function TotalSumChart(props) {
                     series={newConfirmedChart.series}
                     type="area"
                     width="750"
+                    height="400"
                 />
             </div>
         </div>

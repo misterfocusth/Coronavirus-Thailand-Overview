@@ -31,8 +31,9 @@ export default function Past14DaysPositiveRateChart(props) {
           },
           colors: ["#EA5771"],
           title: {
-            text: 'อัตราการตรวจพบเชื้อต่อจำนวนการตรวจ Positive Rate',
-            align: 'center',
+            text: 'อัตราการตรวจพบเชื้อ (Positive Rate)',
+            align: 'left',
+            offsetX: 50
           },
           xaxis: {
             categories: [props.testingData[props.testingData.length-13].date, props.testingData[props.testingData.length-12].date, props.testingData[props.testingData.length-11].date, props.testingData[props.testingData.length-10].date, props.testingData[props.testingData.length-9].date, props.testingData[props.testingData.length-8].date, props.testingData[props.testingData.length-7].date, props.testingData[props.testingData.length-6].date, props.testingData[props.testingData.length-5].date, props.testingData[props.testingData.length-4].date, props.testingData[props.testingData.length-3].date, props.testingData[props.testingData.length-2].date, props.testingData[props.testingData.length-1].date],
@@ -47,7 +48,8 @@ export default function Past14DaysPositiveRateChart(props) {
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
                     type="area"
-                    width="750"
+                    width="500"
+                    height="500"
                 />
             </div>
         </div>

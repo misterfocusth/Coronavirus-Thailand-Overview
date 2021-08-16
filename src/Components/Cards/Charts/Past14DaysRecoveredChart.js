@@ -20,7 +20,7 @@ export default function Past14DaysRecovered(props) {
           title: {
             text: 'จำนวนผู้หายป่วยย้อนหลัง 14 วัน',
             align: 'left',
-            offsetX: 25
+            offsetX: 10
           },
           xaxis: {
             categories: [
@@ -50,8 +50,8 @@ export default function Past14DaysRecovered(props) {
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
                     type="area"
-                    width="500"
-                    height="500"
+                    width="525"
+                    height="400"
                 />
             </div>
         </div>

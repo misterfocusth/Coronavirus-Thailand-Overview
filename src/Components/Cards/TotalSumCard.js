@@ -23,6 +23,15 @@ export default function TotalSumCard(props) {
         recovered: 0,
         death: 0
     }]);
+    const [total, setTotal] = React.useState({
+        totalCases: 0,
+        todayCases: 0,
+        totalRecovered: 0,
+        todayRecovered: 0,
+        totalDeaths: 0,
+        todayDeaths: 0,
+        hospitalized: 0
+    })
 
     const numberWithCommas = (x) => {
         return x.toLocaleString(undefined, {maximumFractionDigits:0})
@@ -45,8 +54,17 @@ export default function TotalSumCard(props) {
             cases: numberWithCommas(total[0]),
             recovered: numberWithCommas(total[1]),
             death: numberWithCommas(total[2])
+        });
+        setTotal({
+            totalCases: numberWithCommas(props.dailySummary.data.cumulative_covid_cases63),
+            todayCases: numberWithCommas(props.dailySummary.data.daily_covid_cases),
+            totalRecovered: numberWithCommas(props.dailySummary.data.cumulative_recovered_cases63),
+            todayRecovered: numberWithCommas(props.dailySummary.data.daily_recovered),
+            totalDeaths: numberWithCommas(props.dailySummary.data.cumulative_deaths63),
+            todayDeaths: numberWithCommas(props.dailySummary.data.daily_deaths),
+            hospitalized: numberWithCommas(props.dailySummary.data.daily_stay_patient)
         })
-    })
+    }, [])
 
     return (
         <div>
@@ -59,7 +77,7 @@ export default function TotalSumCard(props) {
                     <Divider variant="middle" style={{ marginTop: "15px" }} />
 
                     <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
-                        ยอดสะสมผู้ติดเชื้อ : <span style={{ color: "#EA5771" }} >{numberWithCommas(props.dailySummary.data.cumulative_covid_cases63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#EA5771" }} >{numberWithCommas(props.dailySummary.data.daily_covid_cases)}</span> ราย)
+                        ยอดสะสมผู้ติดเชื้อ : <span style={{ color: "#EA5771" }} >{total.totalCases}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#EA5771" }} >{total.todayCases}</span> ราย)
                     </Typography>
 
                     <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
@@ -69,7 +87,7 @@ export default function TotalSumCard(props) {
                     <Divider variant="middle" style={{ marginTop: "15px" }} />
 
                     <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
-                        ยอดสะสมผู้หายป่วย : <span style={{ color: "#039245" }} >{numberWithCommas(props.dailySummary.data.cumulative_recovered_cases63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#039245" }} >{numberWithCommas(props.dailySummary.data.daily_recovered)}</span> ราย)
+                        ยอดสะสมผู้หายป่วย : <span style={{ color: "#039245" }} >{total.totalRecovered}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#039245" }} >{total.todayRecovered}</span> ราย)
                     </Typography>
 
                     <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
@@ -79,7 +97,7 @@ export default function TotalSumCard(props) {
                     <Divider variant="middle" style={{ marginTop: "15px" }} />
 
                     <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
-                        ยอดสะสมผู้เสียชีวิต : <span style={{ color: "#212121" }} >{numberWithCommas(props.dailySummary.data.cumulative_deaths63)}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#212121" }} >{numberWithCommas(props.dailySummary.data.daily_deaths)}</span> ราย)
+                        ยอดสะสมผู้เสียชีวิต : <span style={{ color: "#212121" }} >{total.totalDeaths}</span> ราย (เพิ่มขึ้น + <span style={{ color: "#212121" }} >{total.todayDeaths}</span> ราย)
                     </Typography>
 
                     <Typography variant="subtitle1" style={{ marginTop: "10px", fontWeight: 600 }}>
@@ -89,7 +107,7 @@ export default function TotalSumCard(props) {
                     <Divider variant="middle" style={{ marginTop: "15px" }} />
 
                     <Typography variant="h6" style={{ marginTop: "10px", fontWeight: 600 }}>
-                        ยอดสะสมรักษาตัวในโรงพยาบาล : <span style={{ color: "#fbc02d" }} >{numberWithCommas(props.dailySummary.data.cumulative_recovered_cases63)}</span> ราย
+                        ยอดสะสมรักษาตัวในโรงพยาบาล : <span style={{ color: "#fbc02d" }} >{total.hospitalized}</span> ราย
                     </Typography>
                 </CardContent>
             </Card>

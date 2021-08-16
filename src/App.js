@@ -13,9 +13,7 @@ import Divider from '@material-ui/core/Divider';
 // Components
 import HeaderCard from "./Components/Cards/HeaderCard";
 import NewConfirmedChart from "./Components/Cards/Charts/Past14DaysConfirmedChart";
-import NewCasesAndNewRecoveredChart from "./Components/Cards/Charts/Past14DaysCasesAndNewRecoveredChart";
 import NewDeathsChart from "./Components/Cards/Charts/Past14DaysDeathsChart";
-import Past14DaysSumChart from "./Components/Cards/Charts/Past14DaysSumChart";
 import TodayMostCasesProvincesChart from "./Components/Cards/Charts/TodayMostCasesProvincesChart";
 import TotalVaccineChart from "./Components/Cards/Charts/Vaccination/TotalVaccineChart";
 import Past14DaysVaccineChart from "./Components/Cards/Charts/Vaccination/Past14DaysVaccineChart";
@@ -27,27 +25,22 @@ import "firebase/analytics";
 import Past14DaysInHospital from "./Components/Cards/Charts/Past14DaysInHospitalChart";
 import Past14DaysRecovered from "./Components/Cards/Charts/Past14DaysRecoveredChart";
 import Past14DaysTestingChart from "./Components/Cards/Charts/Past14DaysTestingChart";
-import Past14DaysPositiveRateChart from "./Components/Cards/Charts/Past14DaysPositiveRateChart";
 import TotalSumCard from "./Components/Cards/TotalSumCard";
 import TotalSumChart from "./Components/Cards/TotalSumChart";
 import TestingSumCard from "./Components/Cards/Charts/Testing/TestingSumCard";
+import Past14DaysNewVaccineChart from "./Components/Cards/Charts/Vaccination/Past14DaysNewVaccineChart";
+import TotalVaccineCard from "./Components/Cards/Charts/Vaccination/TotalVaccineCard";
 
-// var firebaseConfig = {
-//   apiKey: "AIzaSyBOuEygVsnpuFtPG0huRKZKUBXcaE13mHI",
-//   authDomain: "covid-19-thailand-overview.firebaseapp.com",
-//   projectId: "covid-19-thailand-overview",
-//   storageBucket: "covid-19-thailand-overview.appspot.com",
-//   messagingSenderId: "47314685559",
-//   appId: "1:47314685559:web:b61f8f7dbc6241f0d0c072",
-//   measurementId: "G-ZP8N3GHBR7"
-// };
+var firebaseConfig = {
 
-// if (!firebase.apps.length) {
-//   firebase.initializeApp(firebaseConfig);
-// } else {
-//   firebase.app();
-// }
-// firebase.analytics();
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+} else {
+  firebase.app();
+}
+firebase.analytics();
 
 const axios = require("axios");
 
@@ -88,10 +81,11 @@ export default function App() {
     vaccine_by_manufacturer: [{}],
     vaccine_delivery: [{}]
   }]);
+  const [nationalVaccineData, setNationalVaccineData] = useState([{}]);
   const [testingData, setTestingData] = useState([{}]);
 
   // COVID - Daily / Past 14 Days Summary Data
-  const API_KEY = "12c8f541-c0f7-4eed-9888-202107164a9ef46387";
+  const API_KEY = "";
   const DAILY_SUMMARY_ENDPOINT =
     "https://api-lab-covid.mindbase.co.th/v2/stats/daily?key=";
   const DAILY_PROVINCES_SUMMARY_ENDPOINT =
@@ -133,6 +127,7 @@ export default function App() {
         vaccine_by_manufacturer: vaccine_by_manufacturer_response.data,
         vaccine_delivery: vaccine_delivery_response.data
       }]);
+      setNationalVaccineData(vaccine_national_response.data);
       setTestingData(testing_data_response.data);
       setOpenBackdrop(false);
       setIsDataReady(true);
@@ -239,27 +234,11 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <Past14DaysTestingChart testingData={testingData} />
             <TestingSumCard testingData={testingData} />
-            <Past14DaysPositiveRateChart testingData={testingData} />
+            <Past14DaysTestingChart testingData={testingData} />
           </div>
 
-          <h5 className={classes.center} >(มหาวิทยาลัย John Hopkins แนะนำว่าการตรวจเชื้อที่เพียงพอควรมีค่าร้อยละการเจอผลเป็นบวกต่อตัวอย่าง (Positive Rate) ไม่เกิน 5 %)</h5>
           <h5 className={classes.center} >ข้อมูลการตรวจเชื้อโควิด-19 รายวันด้วยวิธี RT-PCR จากกรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข (ตัวเลขการตรวจรายวันหมายถึงจำนวนตัวอย่างที่ได้รับการตรวจ RT-PCR จากห้องปฏิบัติการของรัฐบาลและเอกชน ข้อมูลอัพเดทรายสัปดาห์)</h5>
-
-          <Divider variant="middle" style={{ marginTop: "15px" }} />
-
-          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>เเนวโน้มสถานการณ์การติดเชื้อโควิด-19 ในประเทศไทย ย้อนหลัง 12 วันล่าสุด</h2>
-
-          <div
-            className={classes.center}
-            style={{
-              marginTop: "15px"
-            }}
-          >
-            <Past14DaysSumChart past14DaySummary={past14DaySummary} />
-            <NewCasesAndNewRecoveredChart past14DaySummary={past14DaySummary} />
-          </div>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
@@ -272,6 +251,7 @@ export default function App() {
             }}
           >
             <TotalVaccineBar dailySummary={dailySummary} />
+            <TotalVaccineCard nationalVaccineData={nationalVaccineData} />
           </div>
 
           <div
@@ -280,9 +260,18 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <TotalVaccineChart past14DaySummary={past14DaySummary} />
-            <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
+            <TotalVaccineChart nationalVaccineData={nationalVaccineData} />
+            <Past14DaysVaccineChart nationalVaccineData={nationalVaccineData} />
+            <Past14DaysNewVaccineChart nationalVaccineData={nationalVaccineData} />
           </div>
+
+          <h5 className={classes.center} >ข้อมูลความคืบหน้าการฉีดวัคซีนโควิด-19 ในประเทศไทย จาก The Researcher COVID Data
+            GitHub : (<a href="https://github.com/porames/the-researcher-covid-data">
+        <span>porames/the-researcher-covid-data</span>
+      </a>) เเละ (<a href="https://dashboard-vaccine.moph.go.th/dashboard.html">
+        <span>หมอพร้อม - Vaccine Dashboard</span>
+      </a>)
+          </h5>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
