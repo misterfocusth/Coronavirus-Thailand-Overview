@@ -1,26 +1,12 @@
 import React from "react";
 import Chart from "react-apexcharts";
 
-export default function NewConfirmedChart(props) {
+export default function Past14DaysRecovered(props) {
 
     var newConfirmedChart = {
         series: [{
-            name: "ผู้ติดเชื้อรายใหม่ : ",
-            data: [
-              props.past14DaySummary.data.details[13].daily_covid_cases, 
-              props.past14DaySummary.data.details[12].daily_covid_cases, 
-              props.past14DaySummary.data.details[11].daily_covid_cases, 
-              props.past14DaySummary.data.details[10].daily_covid_cases, 
-              props.past14DaySummary.data.details[9].daily_covid_cases, 
-              props.past14DaySummary.data.details[8].daily_covid_cases, 
-              props.past14DaySummary.data.details[7].daily_covid_cases, 
-              props.past14DaySummary.data.details[6].daily_covid_cases, 
-              props.past14DaySummary.data.details[5].daily_covid_cases, 
-              props.past14DaySummary.data.details[4].daily_covid_cases, 
-              props.past14DaySummary.data.details[3].daily_covid_cases, 
-              props.past14DaySummary.data.details[2].daily_covid_cases, 
-              props.past14DaySummary.data.details[1].daily_covid_cases, 
-              props.past14DaySummary.data.details[0].daily_covid_cases]
+            name: "ผู้หายป่วยรายใหม่ : ",
+            data: [props.past14DaySummary.data.details[13].daily_recovered, props.past14DaySummary.data.details[12].daily_recovered, props.past14DaySummary.data.details[11].daily_recovered, props.past14DaySummary.data.details[10].daily_recovered, props.past14DaySummary.data.details[9].daily_recovered, props.past14DaySummary.data.details[8].daily_recovered, props.past14DaySummary.data.details[7].daily_recovered, props.past14DaySummary.data.details[6].daily_recovered, props.past14DaySummary.data.details[5].daily_recovered, props.past14DaySummary.data.details[4].daily_recovered, props.past14DaySummary.data.details[3].daily_recovered, props.past14DaySummary.data.details[2].daily_recovered, props.past14DaySummary.data.details[1].daily_recovered, props.past14DaySummary.data.details[0].daily_recovered]
           }],
         options: {
           chart: {
@@ -30,10 +16,11 @@ export default function NewConfirmedChart(props) {
               enable: false
             }
           },
-          colors: ["#EA5771"],
+            colors: ["#2ECC71"],
           title: {
-            text: 'จำนวนผู้ติดเชื้อรายใหม่ย้อนหลัง 14 วัน',
-            align: 'center'
+            text: 'จำนวนผู้หายป่วยย้อนหลัง 14 วัน',
+            align: 'left',
+            offsetX: 10
           },
           xaxis: {
             categories: [
@@ -63,7 +50,8 @@ export default function NewConfirmedChart(props) {
                     options={newConfirmedChart.options}
                     series={newConfirmedChart.series}
                     type="area"
-                    width="750"
+                    width="525"
+                    height="400"
                 />
             </div>
         </div>

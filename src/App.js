@@ -13,21 +13,26 @@ import Divider from '@material-ui/core/Divider';
 // Components
 import HeaderCard from "./Components/Cards/HeaderCard";
 import NewConfirmedChart from "./Components/Cards/Charts/Past14DaysConfirmedChart";
-import NewCasesAndNewRecoveredChart from "./Components/Cards/Charts/Past14DaysCasesAndNewRecoveredChart";
 import NewDeathsChart from "./Components/Cards/Charts/Past14DaysDeathsChart";
-import Past14DaysSumChart from "./Components/Cards/Charts/Past14DaysSumChart";
 import TodayMostCasesProvincesChart from "./Components/Cards/Charts/TodayMostCasesProvincesChart";
-import TotalVaccineChart from "./Components/Cards/Charts/TotalVaccineChart";
-import Past14DaysPrisonCases from "./Components/Cards/Charts/Past14DaysPrisonCasesChart";
-import Past14DaysVaccineChart from "./Components/Cards/Charts/Past14DaysVaccineChart";
-import TotalVaccineBar from "./Components/Cards/Charts/TotalVaccineBar";
+import TotalVaccineChart from "./Components/Cards/Charts/Vaccination/TotalVaccineChart";
+import Past14DaysVaccineChart from "./Components/Cards/Charts/Vaccination/Past14DaysVaccineChart";
+import TotalVaccineBar from "./Components/Cards/Charts/Vaccination/TotalVaccineBar";
 
 // Firebase
 import firebase from "firebase/app";
 import "firebase/analytics";
+import Past14DaysInHospital from "./Components/Cards/Charts/Past14DaysInHospitalChart";
+import Past14DaysRecovered from "./Components/Cards/Charts/Past14DaysRecoveredChart";
+import Past14DaysTestingChart from "./Components/Cards/Charts/Past14DaysTestingChart";
+import TotalSumCard from "./Components/Cards/TotalSumCard";
+import TotalSumChart from "./Components/Cards/TotalSumChart";
+import TestingSumCard from "./Components/Cards/Charts/Testing/TestingSumCard";
+import Past14DaysNewVaccineChart from "./Components/Cards/Charts/Vaccination/Past14DaysNewVaccineChart";
+import TotalVaccineCard from "./Components/Cards/Charts/Vaccination/TotalVaccineCard";
 
 var firebaseConfig = {
-  
+
 };
 
 if (!firebase.apps.length) {
@@ -68,8 +73,18 @@ export default function App() {
   const [dailyProvincesSummary, setDailyProvincesSummary] = useState([{}]);
   const [past14DaySummary, setPast14DatSummary] = useState([{}]);
   const [openBackdrop, setOpenBackdrop] = useState(true);
-  const [isDataReady, setIsDataReady] = useState(false)
+  const [isDataReady, setIsDataReady] = useState(false);
+  const [vaccineData, setVaccineData] = useState([{
+    vaccine_national: [{}],
+    vaccine_provincial: [{}],
+    vaccine_provincial_by_manufacturer: [{}],
+    vaccine_by_manufacturer: [{}],
+    vaccine_delivery: [{}]
+  }]);
+  const [nationalVaccineData, setNationalVaccineData] = useState([{}]);
+  const [testingData, setTestingData] = useState([{}]);
 
+  // COVID - Daily / Past 14 Days Summary Data
   const API_KEY = "";
   const DAILY_SUMMARY_ENDPOINT =
     "https://api-lab-covid.mindbase.co.th/v2/stats/daily?key=";
@@ -78,15 +93,42 @@ export default function App() {
   const Past14DAY_SUMMARY_ENDPOINT =
     "https://api-lab-covid.mindbase.co.th/v2/stats/dailies?key=";
 
+  // Vaccination Data
+  const VACCINE_NATIONAL_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/vaccination/national-vaccination-timeseries.json"; // อัตราการฉีดวัคซีนทั้งประเทศไทย
+  const VACCINE_PROVINCIAL_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/vaccination/provincial-vaccination.json" // การฉีดวัคซีนรายจังหวัด แยกตามโดสที่ฉีด
+  const VACCINE_PROVINCIAL_BY_MANUFACTURER_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/vaccination/provincial-vaccination-by-manufacturer.json"; // การฉีดวัคซีนรายจังหวัด แยกตามชนิดวัคซีน
+  const VACCINE_BY_MANUFACTURER_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/vaccination/vaccine-manufacturer-timeseries.json"; // อัตราการฉีดวัคซีนของแต่ละผู้ผลิต
+  const VACCINE_DELIVERY_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/vaccination/national-vaccination-timeseries.json"; // การจัดสรรวัคซีน
+
+  // RT-PCR Lab Testing Data
+  const RT_PCR_TESTING_ENDPOINT = "https://raw.githubusercontent.com/wiki/porames/the-researcher-covid-data/cases/testing-data.json";
+
   async function fetchData() {
     const response_1 = await axios.get(DAILY_SUMMARY_ENDPOINT + API_KEY);
     const response_2 = await axios.get(DAILY_PROVINCES_SUMMARY_ENDPOINT + API_KEY);
     const response_3 = await axios.get(Past14DAY_SUMMARY_ENDPOINT + API_KEY + "&limit=14");
 
-    if (response_1.data && response_2.data && response_3.data) {
+    const vaccine_national_response = await axios.get(VACCINE_NATIONAL_ENDPOINT);
+    const vaccine_provincial_response = await axios.get(VACCINE_PROVINCIAL_ENDPOINT);
+    const vaccine_provincial_by_manufacturer_response = await axios.get(VACCINE_PROVINCIAL_BY_MANUFACTURER_ENDPOINT);
+    const vaccine_by_manufacturer_response = await axios.get(VACCINE_BY_MANUFACTURER_ENDPOINT);
+    const vaccine_delivery_response = await axios.get(VACCINE_DELIVERY_ENDPOINT);
+
+    const testing_data_response = await axios.get(RT_PCR_TESTING_ENDPOINT);
+
+    if (response_1.data && response_2.data && response_3.data && vaccine_national_response.data && vaccine_provincial_response.data && vaccine_provincial_by_manufacturer_response.data && vaccine_by_manufacturer_response.data && vaccine_delivery_response.data && testing_data_response.data) {
       setDailySummary(response_1.data)
       setDailyProvincesSummary(response_2.data)
       setPast14DatSummary(response_3.data)
+      setVaccineData([{
+        vaccine_national: vaccine_national_response.data,
+        vaccine_provincial: vaccine_provincial_response.data,
+        vaccine_provincial_by_manufacturer: vaccine_provincial_by_manufacturer_response.data,
+        vaccine_by_manufacturer: vaccine_by_manufacturer_response.data,
+        vaccine_delivery: vaccine_delivery_response.data
+      }]);
+      setNationalVaccineData(vaccine_national_response.data);
+      setTestingData(testing_data_response.data);
       setOpenBackdrop(false);
       setIsDataReady(true);
     } else {
@@ -145,6 +187,7 @@ export default function App() {
 
       {(isDataReady) ?
         <div>
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>สถานการณ์การเเพร่ระบาดของโรคโควิด-19 ในประเทศไทย</h2>
           <div
             className={classes.center}
             style={{
@@ -161,8 +204,9 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <Past14DaysPrisonCases past14DaySummary={past14DaySummary} />
-            <NewCasesAndNewRecoveredChart past14DaySummary={past14DaySummary} />
+            <Past14DaysInHospital past14DaySummary={past14DaySummary} />
+            <Past14DaysRecovered past14DaySummary={past14DaySummary} />
+            <NewDeathsChart past14DaySummary={past14DaySummary} />
           </div>
 
           <div
@@ -171,11 +215,34 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <NewDeathsChart past14DaySummary={past14DaySummary} />
-            <Past14DaysSumChart past14DaySummary={past14DaySummary} />
+            <TotalSumChart past14DaySummary={past14DaySummary} />
+            <TotalSumCard past14DaySummary={past14DaySummary} dailySummary={dailySummary} />
           </div>
 
+          <h5 className={classes.center} >
+            ข้อมูลรายงานสถานการณ์ผู้ติดเชื้อรายวัน / รายจังหวัด / ผู้ป่วยรักษาตัวในโรงพยาบาล / ผู้ป่วยรักษาหายรายวัน / ผู้เสียชีวิตรายใหม่ จาก  Mindbase (<a href="https://lab-covid.mindbase.co.th/#/">
+              <span>lab-covid.mindbase.co.th/</span></a>) / กระทรวงสาธารณสุข (SAT - MOPH)
+          </h5>
+
           <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>เเนวโน้มการตรวจเชื้อโควิด-19 เเละอัตรา Positive Rate (การตรวจพบเชื้อ) ในประเทศไทย ด้วยวิธี RT-PCR</h2>
+
+          <div
+            className={classes.center}
+            style={{
+              marginTop: "15px"
+            }}
+          >
+            <TestingSumCard testingData={testingData} />
+            <Past14DaysTestingChart testingData={testingData} />
+          </div>
+
+          <h5 className={classes.center} >ข้อมูลการตรวจเชื้อโควิด-19 รายวันด้วยวิธี RT-PCR จากกรมวิทยาศาสตร์การแพทย์ กระทรวงสาธารณสุข (ตัวเลขการตรวจรายวันหมายถึงจำนวนตัวอย่างที่ได้รับการตรวจ RT-PCR จากห้องปฏิบัติการของรัฐบาลและเอกชน ข้อมูลอัพเดทรายสัปดาห์)</h5>
+
+          <Divider variant="middle" style={{ marginTop: "15px" }} />
+
+          <h2 style={{ marginTop: "15px", fontWeight: "bold" }} className={classes.center}>ความคืบหน้าการฉีดวัคซีนโควิด-19 ในประเทศไทย</h2>
 
           <div
             className={classes.center}
@@ -184,6 +251,7 @@ export default function App() {
             }}
           >
             <TotalVaccineBar dailySummary={dailySummary} />
+            <TotalVaccineCard nationalVaccineData={nationalVaccineData} />
           </div>
 
           <div
@@ -192,9 +260,18 @@ export default function App() {
               marginTop: "15px"
             }}
           >
-            <Past14DaysVaccineChart past14DaySummary={past14DaySummary} />
-            <TotalVaccineChart past14DaySummary={past14DaySummary} />
+            <TotalVaccineChart nationalVaccineData={nationalVaccineData} />
+            <Past14DaysVaccineChart nationalVaccineData={nationalVaccineData} />
+            <Past14DaysNewVaccineChart nationalVaccineData={nationalVaccineData} />
           </div>
+
+          <h5 className={classes.center} >ข้อมูลความคืบหน้าการฉีดวัคซีนโควิด-19 ในประเทศไทย จาก The Researcher COVID Data
+            GitHub : (<a href="https://github.com/porames/the-researcher-covid-data">
+        <span>porames/the-researcher-covid-data</span>
+      </a>) เเละ (<a href="https://dashboard-vaccine.moph.go.th/dashboard.html">
+        <span>หมอพร้อม - Vaccine Dashboard</span>
+      </a>)
+          </h5>
 
           <Divider variant="middle" style={{ marginTop: "15px" }} />
 
